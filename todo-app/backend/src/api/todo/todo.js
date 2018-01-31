@@ -8,7 +8,8 @@ const todoSchema = new mongoose.Schema({
 	},
 	done: {
 		type: Boolean,
-		required: true
+		required: true,
+		default: false
 	},
 	createdAt: {
 		type: Date,
