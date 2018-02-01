@@ -11,17 +11,32 @@ export default class Todo extends Component {
 	constructor(props){
 		super(props)
 
-		// seta o state que será manipulado, pois props é readonly
 		this.state = {description: '', list: []}
 		this.refresh()
 	}
 
-	// atualiza o state.description
+	refresh(description = '') {
+
+		const search = description ? `&description__regex=/${description}/i` : ''
+		
+		axios.get(`${URL}?sort=-createdAt${search}`)
+			.then(
+			res => this.setState({
+					...this.state,
+					description,
+					list: res.data
+				})
+			)
+	}
+
+	handleClear(){
+		this.refresh()
+	}
+
 	handleChange(event){
 		this.setState({...this.state, description: event.target.value})
 	}
 
-	// adiciona uma todo
 	handleAdd(){
 
 		const description = this.state.description
@@ -33,24 +48,17 @@ export default class Todo extends Component {
 
 	handleRemove(todo){
 		axios.delete(`${URL}/${todo._id}`)
-			.then(res => this.refresh())
+			.then(res => this.refresh(this.state.description))
 	}
 
 	handleDone(todo){
 		axios.put(`${URL}/${todo._id}`,{done: !todo.done})
-		.then(res => this.refresh())
+		.then(res => this.refresh(this.state.description))
 	
 	}
 
-	refresh(){
-		axios.get(`${URL}?sort=-createdAt`)
-			.then(
-				res => this.setState({
-					...this.state, 
-					description: '',
-					list: res.data
-				})
-			)
+	handleSearch(){
+		this.refresh(this.state.description)
 	}
 
 	render() {
@@ -60,7 +68,10 @@ export default class Todo extends Component {
 				<TodoForm
 					description={this.state.description}
 					handleChange={this.handleChange.bind(this)}
-					handleAdd={this.handleAdd.bind(this)}/>
+					handleAdd={this.handleAdd.bind(this)}
+					handleSearch={this.handleSearch.bind(this)}
+					handleClear={this.handleClear.bind(this)}
+				/>
 				<TodoList 
 					list={this.state.list} 
 					handleRemove={this.handleRemove.bind(this)}	
