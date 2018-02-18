@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/loader.js",
   "scripts": {
-	"dev": "nodemon",
-	"production": "pm2 start src/loader.js --name my-money-backend"
-},
+    "dev": "nodemon",
+    "production": "pm2 start src/loader.js --name my-money-backend"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
