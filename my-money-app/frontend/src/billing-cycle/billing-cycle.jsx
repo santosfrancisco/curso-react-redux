@@ -9,6 +9,8 @@ import TabsHeader from '../common/tab/tabs-header'
 import TabsContent from '../common/tab/tabs-content'
 import TabHeader from '../common/tab/tab-header'
 import TabContent from '../common/tab/tab-content'
+import List from './billing-cycle-list'
+
 import { selectTab, showTabs } from '../common/tab/tab-actions'
 
 class BillingCycle extends Component {
@@ -35,7 +37,7 @@ class BillingCycle extends Component {
 					</TabsHeader>
 					<TabsContent>
 						<TabContent id='tabList'>
-							<h1>Lista</h1>
+							<List />
 						</TabContent>
 						<TabContent id='tabCreate'>
 							<h1>Adicionar</h1>
