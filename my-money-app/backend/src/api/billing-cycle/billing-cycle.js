@@ -32,17 +32,17 @@ const debtSchema = new mongoose.Schema({
 const billingCycleSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: true
+		required: [true, 'O campo NOME é obrigatório'],
 	},
 	month: {
 		type: Number,
 		min: 1,
 		max: 12,
-		required: true
+		required: [true, 'O campo MÊS é obrigatório'],
 	},
 	year: {
 		type: Number,
-		required: true,
+		required: [true, 'O campo ANO é obrigatório'],
 		min: 1970,
 		max: 2100
 	},
