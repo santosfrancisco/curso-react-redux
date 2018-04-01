@@ -13,7 +13,7 @@ import List from './billing-cycle-list'
 import Form from './billing-cycle-form'
 
 import { selectTab, showTabs } from '../common/tab/tab-actions'
-import {create} from './billing-cycle-actions'
+import { create, update } from './billing-cycle-actions'
 
 class BillingCycle extends Component {
 
@@ -45,7 +45,7 @@ class BillingCycle extends Component {
 							<Form onSubmit={this.props.create} />
 						</TabContent>
 						<TabContent id='tabUpdate'>
-							<h1>Editar</h1>
+							<Form onSubmit={this.props.update} />
 						</TabContent>
 						<TabContent id='tabDelete'>
 							<h1>Excluir</h1>
