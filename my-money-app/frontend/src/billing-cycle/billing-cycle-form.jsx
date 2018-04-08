@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, formValueSelector } from 'redux-form'
 
 import { init } from './billing-cycle-actions'
-import labelAndInput from '../common/form/label-and-input'
+import LabelAndInput from '../common/form/label-and-input'
+import CreditList from './credit-list'
 
 class BillingCycleForm extends Component {
 	
 	render() {
-		const {handleSubmit, readOnly} = this.props
+		const {handleSubmit, readOnly, credits} = this.props
 
 		return (
 			<form role='form' onSubmit={handleSubmit}>
@@ -20,7 +21,7 @@ class BillingCycleForm extends Component {
 						type='text' 
 						cols='12 4'
 						placeholder='Informe o nome'
-						component={labelAndInput}
+						component={LabelAndInput}
 						readOnly={readOnly}
 					/>
 					<Field 
@@ -29,7 +30,7 @@ class BillingCycleForm extends Component {
 						type='number' 
 						cols='12 4'
 						placeholder='Informe o mês'
-						component={labelAndInput} 
+						component={LabelAndInput} 
 						readOnly={readOnly}
 					/>
 					<Field 
@@ -38,9 +39,13 @@ class BillingCycleForm extends Component {
 						type='number' 
 						cols='12 4'
 						placeholder='Informe o ano'
-						component={labelAndInput} 
+						component={LabelAndInput} 
 						readOnly={readOnly}
 					/>
+					<CreditList 
+						cols='12 6' 
+						readOnly={readOnly}
+						list={credits} />
 				</div>
 				<div className='box-footer'>
 					<button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
@@ -53,6 +58,10 @@ class BillingCycleForm extends Component {
 
 BillingCycleForm = reduxForm({form: 'billingCycleForm', destroyOnUnmount: false})(BillingCycleForm)
 
+const selector = formValueSelector('billingCycleForm')
+
+const mapStateToProps = (state) => ({credits: selector(state, 'credits')})
+
 const mapDispatchToProps = (dispatch) => bindActionCreators({init}, dispatch)
 
-export default connect(null, mapDispatchToProps)(BillingCycleForm)
+export default connect(mapStateToProps, mapDispatchToProps)(BillingCycleForm)
