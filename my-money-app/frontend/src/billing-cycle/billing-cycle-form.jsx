@@ -5,13 +5,22 @@ import { reduxForm, Field, formValueSelector } from 'redux-form'
 
 import { init } from './billing-cycle-actions'
 import LabelAndInput from '../common/form/label-and-input'
-import CreditList from './credit-list'
-
+import ItemList from './item-list'
+import Summary from './summary'
 class BillingCycleForm extends Component {
+
+	calculateSummary(){
+		const sum = (total, value) => total + value
+		return {
+			sumOfCredits: this.props.credits.map(c => +c.value || 0).reduce(sum),
+			sumOfDebts: this.props.debts.map(d => +d.value || 0).reduce(sum)
+
+		}
+	}
 	
 	render() {
-		const {handleSubmit, readOnly, credits} = this.props
-
+		const {handleSubmit, readOnly, credits, debts} = this.props
+		const { sumOfCredits, sumOfDebts } = this.calculateSummary()
 		return (
 			<form role='form' onSubmit={handleSubmit}>
 				<div className='box-body'>
@@ -42,10 +51,25 @@ class BillingCycleForm extends Component {
 						component={LabelAndInput} 
 						readOnly={readOnly}
 					/>
-					<CreditList 
+
+					<Summary credit={sumOfCredits} debt={sumOfDebts} />
+
+					<ItemList 
 						cols='12 6' 
 						readOnly={readOnly}
-						list={credits} />
+						list={credits}
+						field='credits'
+						legend='Créditos'
+					/>
+
+					<ItemList
+						cols='12 6'
+						readOnly={readOnly}
+						list={debts}
+						field='debts'
+						legend='Débitos'
+						showStatus='true'
+					/>
 				</div>
 				<div className='box-footer'>
 					<button type='submit' className={`btn btn-${this.props.submitClass}`}>{this.props.submitLabel}</button>
@@ -60,7 +84,7 @@ BillingCycleForm = reduxForm({form: 'billingCycleForm', destroyOnUnmount: false}
 
 const selector = formValueSelector('billingCycleForm')
 
-const mapStateToProps = (state) => ({credits: selector(state, 'credits')})
+const mapStateToProps = (state) => ({credits: selector(state, 'credits'), debts: selector(state, 'debts')})
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({init}, dispatch)
 
