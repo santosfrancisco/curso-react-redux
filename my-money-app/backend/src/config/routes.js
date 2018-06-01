@@ -5,14 +5,16 @@ module.exports = function(server){
 
   // api com validaçao de token
 	const protectedApi = express.Router()
-	server.use('/api', protectedApi)
+  server.use('/api', protectedApi)
+  
+  protectedApi.use(auth)
 
 	const BillingCycle = require('../api/billing-cycle/billing-cycle-service')
   BillingCycle.register(protectedApi, '/billingcycles')
   
   // api sem necessidade de validaçao de token
   const openApi = express.Router()
-  serve.use("/oapi", openApi)
+  server.use("/oapi", openApi)
 
   const authService = require("../api/user/authService")
   openApi.post("/login", authService.login)
